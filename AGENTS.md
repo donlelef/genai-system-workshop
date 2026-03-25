@@ -33,3 +33,10 @@ Project rules and context for AI coding agents.
 
 - Extract repeated logic into shared functions or modules.
 - Implement each behavior in one place; call or reuse instead of copying.
+
+## Clean architecture
+
+- Keep a clear separation: domain logic independent of frameworks and I/O.
+- Dependencies point inward (e.g. use cases depend on domain, not the other way around).
+- Keep UI, persistence, and external services in outer layers; business rules in the core.
+- Use core/ and infrastructure/ folder for each domain folder

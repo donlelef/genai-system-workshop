@@ -1,0 +1,19 @@
+set dotenv-load := false
+
+populate-lancedb:
+    uv run --env-file .env src/scripts/populate_lancedb.py
+
+populate-qdrant:
+    uv run --env-file .env src/scripts/populate_qdrant.py
+
+query-lancedb question:
+    uv run --env-file .env src/scripts/query_lancedb.py "{{question}}"
+
+query-qdrant question:
+    uv run --env-file .env src/scripts/query_qdrant.py "{{question}}"
+
+qdrant-up:
+    docker run -d --name qdrant -p 6333:6333 -p 6334:6334 qdrant/qdrant:latest
+
+qdrant-down:
+    docker rm -f qdrant
