@@ -1,6 +1,8 @@
 from pathlib import Path
 
 import lancedb
+from lancedb.embeddings import get_registry
+from lancedb.pydantic import LanceModel, Vector
 from langfuse import observe
 
 from rag.src.core.models import Movie, SearchResult
@@ -8,13 +10,24 @@ from rag.src.core.models import Movie, SearchResult
 DB_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "lancedb"
 TABLE_NAME = "movies"
 
+_embedding = get_registry().get("openai").create(name="text-embedding-3-small")
+
+
+class MovieRecord(LanceModel):
+    id: str
+    title: str
+    overview: str = _embedding.SourceField()
+    release_date: str
+    runtime: int
+    genre: str
+    vector: Vector(_embedding.ndims()) = _embedding.VectorField()
+
 
 def _connect() -> lancedb.DBConnection:
     return lancedb.connect(str(DB_PATH))
 
 
-def populate(movies: list[Movie], embeddings: list[list[float]]) -> None:
-    """Create or overwrite the LanceDB table with movie data and embeddings."""
+def populate(movies: list[Movie]) -> None:
     records = [
         {
             "id": m.id,
@@ -23,35 +36,28 @@ def populate(movies: list[Movie], embeddings: list[list[float]]) -> None:
             "release_date": m.release_date,
             "runtime": m.runtime,
             "genre": m.genre,
-            "vector": emb,
         }
-        for m, emb in zip(movies, embeddings)
+        for m in movies
     ]
 
     db = _connect()
-    table = db.create_table(TABLE_NAME, data=records, mode="overwrite")
+    table = db.create_table(TABLE_NAME, schema=MovieRecord, mode="overwrite")
+    table.add(records)
     table.create_fts_index("overview", replace=True)
 
 
 @observe(name="lancedb-hybrid-search")
 def hybrid_search(
     query_text: str,
-    query_vector: list[float],
     limit: int = 10,
 ) -> list[SearchResult]:
-    """Hybrid search: combine vector similarity with full-text BM25 on overview."""
     db = _connect()
     table = db.open_table(TABLE_NAME)
 
-    rows = (
-        table.search(query_text, query_type="hybrid")
-        .vector(query_vector)
-        .limit(limit)
-        .to_pandas()
-    )
+    rows = table.search(query_text, query_type="hybrid").limit(limit).to_list()
 
     results: list[SearchResult] = []
-    for _, row in rows.iterrows():
+    for row in rows:
         movie = Movie(
             id=str(row["id"]),
             title=str(row["title"]),

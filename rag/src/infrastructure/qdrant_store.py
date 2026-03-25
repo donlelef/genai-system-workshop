@@ -16,7 +16,6 @@ def _connect() -> QdrantClient:
 
 
 def populate(movies: list[Movie], embeddings: list[list[float]]) -> None:
-    """Create or recreate the Qdrant collection with movie data and embeddings."""
     client = _connect()
 
     client.recreate_collection(
@@ -56,7 +55,6 @@ def vector_search(
     query_vector: list[float],
     limit: int = 10,
 ) -> list[SearchResult]:
-    """Pure cosine vector search against Qdrant."""
     client = _connect()
 
     hits = client.query_points(

@@ -40,3 +40,35 @@ Project rules and context for AI coding agents.
 - Dependencies point inward (e.g. use cases depend on domain, not the other way around).
 - Keep UI, persistence, and external services in outer layers; business rules in the core.
 - Use core/ and infrastructure/ folder for each domain folder
+
+## Logging
+
+- Use the `logging` module for all output. Never use `print()`.
+- Add logging to all scripts and modules.
+
+## No global variables
+
+- Never use mutable global variables. Pass dependencies explicitly or use local state.
+
+## Data processing
+
+- Use **Polars**, not pandas, for all dataframe operations.
+
+## Documentation
+
+- Avoid docstrings. Use clear names and type hints to make code self-documenting.
+
+## Observability (Langfuse)
+
+- Use `get_client()` from `langfuse`, not direct `Langfuse()` instantiation.
+- Never call `get_client().flush()` — the SDK handles flushing automatically.
+
+## LLM integration (OpenAI)
+
+- Use the **Responses API** (`client.responses.create()`), not Chat Completions.
+- Use **GPT-5.4** as the default model.
+
+## LanceDB
+
+- Use `LanceModel` from `lancedb.pydantic` for schema definitions.
+- Use the automatic embedding function via `get_registry()` from `lancedb.embeddings`.

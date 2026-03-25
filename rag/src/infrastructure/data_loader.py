@@ -1,6 +1,6 @@
 from pathlib import Path
 
-import pandas as pd
+import polars as pl
 
 from rag.src.core.models import Movie
 
@@ -8,8 +8,7 @@ DATA_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "movies.par
 
 
 def load_movies() -> list[Movie]:
-    """Load movies from the parquet file into domain objects."""
-    df = pd.read_parquet(DATA_PATH)
+    df = pl.read_parquet(DATA_PATH)
     return [
         Movie(
             id=str(row["id"]),
@@ -19,5 +18,5 @@ def load_movies() -> list[Movie]:
             runtime=int(row["runtime"]),
             genre=str(row["genre"]),
         )
-        for _, row in df.iterrows()
+        for row in df.iter_rows(named=True)
     ]

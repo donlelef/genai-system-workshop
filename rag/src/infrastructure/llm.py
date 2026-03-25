@@ -8,50 +8,36 @@ from rag.src.core.prompts import (
     RAG_USER_TEMPLATE,
 )
 
-CHAT_MODEL = "gpt-4o-mini"
-
-_client: OpenAI | None = None
-
-
-def _get_client() -> OpenAI:
-    global _client
-    if _client is None:
-        _client = OpenAI()
-    return _client
+CHAT_MODEL = "gpt-5.4"
 
 
 @observe(name="hyde-generate")
 def generate_hypothetical_document(question: str) -> str:
-    """Use HyDE to generate a hypothetical movie overview for the query."""
-    response = _get_client().chat.completions.create(
+    client = OpenAI()
+    response = client.responses.create(
         model=CHAT_MODEL,
-        messages=[
-            {"role": "system", "content": HYDE_SYSTEM_PROMPT},
-            {"role": "user", "content": question},
-        ],
+        instructions=HYDE_SYSTEM_PROMPT,
+        input=question,
         temperature=0.7,
+        store=False,
     )
-    return response.choices[0].message.content or ""
+    return response.output_text or ""
 
 
 @observe(name="rag-answer")
 def generate_answer(question: str, results: list[SearchResult]) -> str:
-    """Generate a final answer grounded in the retrieved movie context."""
+    client = OpenAI()
     context_parts: list[str] = []
     for r in results:
         m = r.movie
         context_parts.append(f"- {m.title} ({m.release_date}, {m.genre}): {m.overview}")
     context = "\n".join(context_parts)
 
-    response = _get_client().chat.completions.create(
+    response = client.responses.create(
         model=CHAT_MODEL,
-        messages=[
-            {"role": "system", "content": RAG_SYSTEM_PROMPT},
-            {
-                "role": "user",
-                "content": RAG_USER_TEMPLATE.format(context=context, question=question),
-            },
-        ],
+        instructions=RAG_SYSTEM_PROMPT,
+        input=RAG_USER_TEMPLATE.format(context=context, question=question),
         temperature=0.3,
+        store=False,
     )
-    return response.choices[0].message.content or ""
+    return response.output_text or ""
