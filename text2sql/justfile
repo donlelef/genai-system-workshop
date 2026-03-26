@@ -1,0 +1,23 @@
+export PYTHONPATH := "src"
+
+db-up:
+    docker compose up -d
+
+db-down:
+    docker compose down
+
+database-mcp:
+    uv run --env-file .env src/infrastructure/database_mcp.py
+
+run-agent:
+    uv run --env-file .env src/scripts/run_agent.py
+
+run-all:
+    docker compose up -d
+    trap 'kill %1 2>/dev/null' EXIT; \
+    uv run --env-file .env src/infrastructure/database_mcp.py & \
+    sleep 2 && \
+    uv run --env-file .env src/scripts/run_agent.py
+
+evaluate:
+    uv run --env-file .env src/scripts/evaluate.py
