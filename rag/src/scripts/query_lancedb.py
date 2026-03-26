@@ -21,7 +21,7 @@ def main() -> None:
     question = sys.argv[1]
 
     logger.info("Question: %s", question)
-    results = hybrid_search(query_text=question, limit=10)
+    results = hybrid_search(query_text=question)
     answer = generate_answer(question, results)
     logger.info("Answer:\n%s", answer)
 

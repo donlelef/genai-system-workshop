@@ -59,16 +59,7 @@ def populate(movies: list[Movie]) -> None:
     table.create_fts_index("overview", replace=True)
 
 
-@observe(name="lancedb-hybrid-search")
-def hybrid_search(
-    query_text: str,
-    limit: int = 10,
-) -> list[SearchResult]:
-    db = _connect()
-    table = db.open_table(TABLE_NAME)
-
-    rows = table.search(query_text, query_type="hybrid").limit(limit).to_list()
-
+def _rows_to_results(rows: list[dict]) -> list[SearchResult]:
     results: list[SearchResult] = []
     for row in rows:
         movie = Movie(
@@ -81,3 +72,20 @@ def hybrid_search(
         )
         results.append(SearchResult(movie=movie, score=float(row.get("_score", 0.0))))
     return results
+
+
+@observe(name="lancedb-hybrid-search")
+def hybrid_search(
+    query_text: str,
+    limit: int = 5,
+) -> list[SearchResult]:
+    db = _connect()
+    table = db.open_table(TABLE_NAME)
+
+    vector_rows = table.search(query_text, query_type="vector").limit(limit).to_list()
+    fts_rows = table.search(query_text, query_type="fts").limit(limit).to_list()
+
+    logger.info("Vector search returned %d results", len(vector_rows))
+    logger.info("FTS search returned %d results", len(fts_rows))
+
+    return _rows_to_results(vector_rows) + _rows_to_results(fts_rows)
