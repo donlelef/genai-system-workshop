@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 import lancedb
@@ -6,6 +7,8 @@ from lancedb.pydantic import LanceModel, Vector
 from langfuse import observe
 
 from core.models import Movie, SearchResult
+
+logger = logging.getLogger(__name__)
 
 DB_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "lancedb"
 TABLE_NAME = "movies"
@@ -27,6 +30,9 @@ def _connect() -> lancedb.DBConnection:
     return lancedb.connect(str(DB_PATH))
 
 
+BATCH_SIZE = 2048
+
+
 def populate(movies: list[Movie]) -> None:
     records = [
         {
@@ -42,7 +48,14 @@ def populate(movies: list[Movie]) -> None:
 
     db = _connect()
     table = db.create_table(TABLE_NAME, schema=MovieRecord, mode="overwrite")
-    table.add(records)
+
+    for i in range(0, len(records), BATCH_SIZE):
+        batch = records[i : i + BATCH_SIZE]
+        table.add(batch)
+        logger.info(
+            "Embedded batch %d/%d", i // BATCH_SIZE + 1, -(-len(records) // BATCH_SIZE)
+        )
+
     table.create_fts_index("overview", replace=True)
 
 
