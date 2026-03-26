@@ -1,5 +1,6 @@
 import logging
 
+from langfuse import observe
 from langfuse.openai import OpenAI
 
 logger = logging.getLogger(__name__)
@@ -9,6 +10,7 @@ EMBEDDING_DIMENSIONS = 1536
 BATCH_SIZE = 2048
 
 
+@observe(name="embed-texts")
 def embed_texts(texts: list[str]) -> list[list[float]]:
     client = OpenAI()
     all_embeddings: list[list[float]] = []
@@ -24,5 +26,6 @@ def embed_texts(texts: list[str]) -> list[list[float]]:
     return all_embeddings
 
 
+@observe(name="embed-single")
 def embed_single(text: str) -> list[float]:
     return embed_texts([text])[0]
