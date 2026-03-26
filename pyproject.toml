@@ -5,10 +5,20 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "agno>=2.5.10",
+    "ddgs>=8.0.0",
+    "fastapi>=0.135.2",
+    "fastmcp>=3.1.1",
     "lancedb>=0.30.1",
     "langfuse>=4.0.1",
     "openai>=2.30.0",
+    "openinference-instrumentation-agno>=0.1.0",
+    "opentelemetry-exporter-otlp>=1.20.0",
+    "opentelemetry-sdk>=1.20.0",
     "polars>=1.30.0",
     "pyarrow>=23.0.1",
     "qdrant-client>=1.17.1",
+    "setuptools<82",
+    "sqlalchemy>=2.0.48",
+    "uvicorn>=0.42.0",
 ]
