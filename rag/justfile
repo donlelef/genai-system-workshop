@@ -1,0 +1,15 @@
+set dotenv-load := false
+
+export PYTHONPATH := "src"
+
+populate-lancedb:
+    uv run --env-file .env src/scripts/populate_lancedb.py
+
+populate-qdrant:
+    uv run --env-file .env src/scripts/populate_qdrant.py
+
+query-lancedb question:
+    uv run --env-file .env src/scripts/query_lancedb.py "{{question}}"
+
+query-qdrant question:
+    uv run --env-file .env src/scripts/query_qdrant.py "{{question}}"

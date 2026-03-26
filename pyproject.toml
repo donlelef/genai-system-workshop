@@ -1,7 +1,14 @@
 [project]
-name = "chat-with-your-data-workshop"
+name = "genai-system-workshop"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "lancedb>=0.30.1",
+    "langfuse>=4.0.1",
+    "openai>=2.30.0",
+    "polars>=1.30.0",
+    "pyarrow>=23.0.1",
+    "qdrant-client>=1.17.1",
+]
