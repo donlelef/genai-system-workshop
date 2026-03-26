@@ -1,0 +1,42 @@
+[
+  {
+    "question": "How many customers are there?",
+    "ground_truth_sql": "SELECT COUNT(*) AS customer_count FROM customers"
+  },
+  {
+    "question": "List all products in the Electronics category.",
+    "ground_truth_sql": "SELECT id, name, price, stock FROM products WHERE category = 'Electronics'"
+  },
+  {
+    "question": "What is the most expensive product?",
+    "ground_truth_sql": "SELECT name, price FROM products ORDER BY price DESC LIMIT 1"
+  },
+  {
+    "question": "Which customers are from New York?",
+    "ground_truth_sql": "SELECT name, email FROM customers WHERE city = 'New York'"
+  },
+  {
+    "question": "How many orders has each customer placed?",
+    "ground_truth_sql": "SELECT c.name, COUNT(o.id) AS order_count FROM customers c JOIN orders o ON c.id = o.customer_id GROUP BY c.name ORDER BY order_count DESC"
+  },
+  {
+    "question": "What is the total revenue generated?",
+    "ground_truth_sql": "SELECT SUM(p.price * o.quantity) AS total_revenue FROM orders o JOIN products p ON o.product_id = p.id"
+  },
+  {
+    "question": "Which customer placed the most orders?",
+    "ground_truth_sql": "SELECT c.name, COUNT(o.id) AS order_count FROM customers c JOIN orders o ON c.id = o.customer_id GROUP BY c.name ORDER BY order_count DESC LIMIT 1"
+  },
+  {
+    "question": "List all products that have never been ordered.",
+    "ground_truth_sql": "SELECT p.name FROM products p LEFT JOIN orders o ON p.id = o.product_id WHERE o.id IS NULL"
+  },
+  {
+    "question": "What is the average product price per category?",
+    "ground_truth_sql": "SELECT category, AVG(price) AS avg_price FROM products GROUP BY category ORDER BY avg_price DESC"
+  },
+  {
+    "question": "Which products were ordered by customers from Chicago?",
+    "ground_truth_sql": "SELECT DISTINCT p.name FROM products p JOIN orders o ON p.id = o.product_id JOIN customers c ON o.customer_id = c.id WHERE c.city = 'Chicago'"
+  }
+]
