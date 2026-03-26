@@ -1,8 +1,8 @@
 from langfuse import observe
 from langfuse.openai import OpenAI
 
-from rag.src.core.models import SearchResult
-from rag.src.core.prompts import (
+from core.models import SearchResult
+from core.prompts import (
     HYDE_SYSTEM_PROMPT,
     RAG_SYSTEM_PROMPT,
     RAG_USER_TEMPLATE,

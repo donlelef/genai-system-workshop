@@ -3,9 +3,9 @@ import sys
 
 from langfuse import observe
 
-from rag.src.infrastructure.lancedb_store import hybrid_search
-from rag.src.infrastructure.llm import generate_answer
-from rag.src.scripts import setup_logging
+from infrastructure.lancedb_store import hybrid_search
+from infrastructure.llm import generate_answer
+from scripts import setup_logging
 
 logger = logging.getLogger(__name__)
 

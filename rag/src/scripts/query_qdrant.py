@@ -3,10 +3,10 @@ import sys
 
 from langfuse import observe
 
-from rag.src.infrastructure.embeddings import embed_single
-from rag.src.infrastructure.llm import generate_answer, generate_hypothetical_document
-from rag.src.infrastructure.qdrant_store import vector_search
-from rag.src.scripts import setup_logging
+from infrastructure.embeddings import embed_single
+from infrastructure.llm import generate_answer, generate_hypothetical_document
+from infrastructure.qdrant_store import vector_search
+from scripts import setup_logging
 
 logger = logging.getLogger(__name__)
 

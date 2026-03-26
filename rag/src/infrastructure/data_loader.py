@@ -2,7 +2,7 @@ from pathlib import Path
 
 import polars as pl
 
-from rag.src.core.models import Movie
+from core.models import Movie
 
 DATA_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "movies.parquet"
 

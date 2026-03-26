@@ -1,8 +1,8 @@
 import logging
 
-from rag.src.infrastructure.data_loader import load_movies
-from rag.src.infrastructure.lancedb_store import populate
-from rag.src.scripts import setup_logging
+from infrastructure.data_loader import load_movies
+from infrastructure.lancedb_store import populate
+from scripts import setup_logging
 
 logger = logging.getLogger(__name__)
 

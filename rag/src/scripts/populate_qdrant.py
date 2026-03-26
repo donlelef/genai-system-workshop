@@ -1,9 +1,9 @@
 import logging
 
-from rag.src.infrastructure.data_loader import load_movies
-from rag.src.infrastructure.embeddings import embed_texts
-from rag.src.infrastructure.qdrant_store import populate
-from rag.src.scripts import setup_logging
+from infrastructure.data_loader import load_movies
+from infrastructure.embeddings import embed_texts
+from infrastructure.qdrant_store import populate
+from scripts import setup_logging
 
 logger = logging.getLogger(__name__)
 

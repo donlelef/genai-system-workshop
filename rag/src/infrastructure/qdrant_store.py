@@ -4,8 +4,8 @@ from langfuse import observe
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, PointStruct, VectorParams
 
-from rag.src.core.models import Movie, SearchResult
-from rag.src.infrastructure.embeddings import EMBEDDING_DIMENSIONS
+from core.models import Movie, SearchResult
+from infrastructure.embeddings import EMBEDDING_DIMENSIONS
 
 COLLECTION_NAME = "movies"
 

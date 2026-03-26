@@ -5,7 +5,7 @@ from lancedb.embeddings import get_registry
 from lancedb.pydantic import LanceModel, Vector
 from langfuse import observe
 
-from rag.src.core.models import Movie, SearchResult
+from core.models import Movie, SearchResult
 
 DB_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "lancedb"
 TABLE_NAME = "movies"

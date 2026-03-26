@@ -1,5 +1,7 @@
 set dotenv-load := false
 
+export PYTHONPATH := "src"
+
 populate-lancedb:
     uv run --env-file .env src/scripts/populate_lancedb.py
 
