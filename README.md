@@ -2,6 +2,10 @@
 
 Three hands-on projects that explore different approaches to building chat-with-your-data systems using LLMs: **Retrieval-Augmented Generation (RAG)**, an **agentic assistant**, and **Text-to-SQL**. Each project lives in its own directory with a self-contained `justfile` for running tasks.
 
+## Theory
+
+The theoretical background for this workshop is available in the [slide deck](https://canva.link/mowp604a1ya3g0e).
+
 ## Prerequisites
 
 - Python 3.14+
