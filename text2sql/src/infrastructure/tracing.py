@@ -1,3 +1,4 @@
+import atexit
 import base64
 import logging
 import os
@@ -27,4 +28,5 @@ def configure_langfuse_tracing() -> None:
     tracer_provider.add_span_processor(SimpleSpanProcessor(OTLPSpanExporter()))
     AgnoInstrumentor().instrument(tracer_provider=tracer_provider)
 
+    atexit.register(tracer_provider.force_flush)
     logger.info("Langfuse tracing configured -> %s", otel_endpoint)
