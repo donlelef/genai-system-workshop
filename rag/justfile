@@ -1,13 +1,19 @@
 export PYTHONPATH := "src"
 
+db-up:
+    docker compose up -d
+
+db-down:
+    docker compose down
+
 populate-lancedb:
     uv run --env-file .env src/scripts/populate_lancedb.py
 
 populate-qdrant:
     uv run --env-file .env src/scripts/populate_qdrant.py
 
-query-lancedb question:
+query-lancedb question="I want to watch a movie about dragons":
     uv run --env-file .env src/scripts/query_lancedb.py "{{question}}"
 
-query-qdrant question:
+query-qdrant question="I want to watch a movie about dragons":
     uv run --env-file .env src/scripts/query_qdrant.py "{{question}}"
